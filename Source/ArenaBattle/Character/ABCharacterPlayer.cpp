@@ -199,6 +199,7 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 
 void AABCharacterPlayer::Attack(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AttackAttackAttackAttackAttackAttack"));
 	ProcessComboCommand();
 }
 
