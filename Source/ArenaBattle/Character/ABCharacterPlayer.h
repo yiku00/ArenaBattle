@@ -51,10 +51,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> QuaterMoveAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> AttackAction;
+
 	void ShoulderMove(const struct FInputActionValue& Value);
 	void QuaterMove(const struct FInputActionValue& Value);
 	void ShoulderLook(const struct FInputActionValue& Value);
+	void Attack(const struct FInputActionValue& Value);
 
+	virtual void ProcessComboCommand() override;
 	ECharacterControlType CurrentControlType;
 private:
 

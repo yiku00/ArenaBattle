@@ -52,6 +52,12 @@ AABCharacterPlayer::AABCharacterPlayer()
 		QuaterMoveAction = QuaterMoveRef.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> AttackActionRef(TEXT("/Game/ArenaBattle/Input/Actions/IA_Attack.IA_Attack"));
+	if (QuaterMoveRef.Succeeded())
+	{
+		AttackAction = AttackActionRef.Object;
+	}
+
 	CurrentControlType = ECharacterControlType::Quater;
 
 }
@@ -81,7 +87,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		EnhancedInputComponent->BindAction(QuaterMoveAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::QuaterMove);
 
-
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::Attack);
 	}
 }
 
@@ -157,7 +163,7 @@ void AABCharacterPlayer::QuaterMove(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
-	float InputSizeSquared = MovementVector.SquaredLength()  ;
+	
 	float MovementVectorSize = 1.f;
 	float MovementVectorSizeSquared = MovementVector.SquaredLength();
 
@@ -169,8 +175,11 @@ void AABCharacterPlayer::QuaterMove(const FInputActionValue& Value)
 	else {
 		MovementVectorSize = FMath::Sqrt(MovementVectorSizeSquared);
 	}
+
+
 	FVector MoveDirection = FVector(MovementVector.X, MovementVector.Y, 0.f);
-	GetController()->SetControlRotation(FRotationMatrix::MakeFromX(MoveDirection).Rotator());
+	//GetController()->SetControlRotation(FRotationMatrix::MakeFromX(MoveDirection).Rotator());
+	GetController()->SetControlRotation(MoveDirection.Rotation());
 	AddMovementInput(MoveDirection, MovementVectorSize);
 	AddMovementInput(MoveDirection, MovementVectorSize);
 }
@@ -186,4 +195,14 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AABCharacterPlayer::Attack(const FInputActionValue& Value)
+{
+	ProcessComboCommand();
+}
+
+void AABCharacterPlayer::ProcessComboCommand()
+{
+	Super::ProcessComboCommand();
 }
