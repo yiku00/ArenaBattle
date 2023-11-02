@@ -19,6 +19,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void SetCharacterControlData(const class UABCharacterControlData* CharacterControlData) override;
+
+	void ChangeCharaterControl();
+	void SetCharacterControl(ECharacterControlType NewCharacterControlType);
 //CameraSection
 protected:
 	/** Camera boom positioning the camera behind the character */
@@ -32,19 +37,25 @@ protected:
 	//InputSection
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> DefaultMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> MoveAction;
+	TObjectPtr<class UInputAction> ChangeControlAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> LookAction;
+	TObjectPtr<class UInputAction> ShoulderMoveAction;
 
-	void Move(const struct FInputActionValue& Value);
-	void Look(const struct FInputActionValue& Value);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> ShoulderLookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> QuaterMoveAction;
+
+	void ShoulderMove(const struct FInputActionValue& Value);
+	void QuaterMove(const struct FInputActionValue& Value);
+	void ShoulderLook(const struct FInputActionValue& Value);
+
+	ECharacterControlType CurrentControlType;
 private:
 
 };
