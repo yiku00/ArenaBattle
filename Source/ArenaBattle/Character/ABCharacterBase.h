@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interface/ABAnimationAttackInterface.h"
+#include "Interface/ABCharacterWidgetInterface.h"
 #include "ABCharacterBase.generated.h"
 
 UENUM()
@@ -15,7 +16,7 @@ enum class ECharacterControlType : uint8
 };
 
 UCLASS()
-class ARENABATTLE_API AABCharacterBase : public ACharacter, public IABAnimationAttackInterface
+class ARENABATTLE_API AABCharacterBase : public ACharacter, public IABAnimationAttackInterface, public IABCharacterWidgetInterface
 {
 	GENERATED_BODY()
 
@@ -53,6 +54,16 @@ protected:
 
 	virtual void SetDead();
 	void PlayDeadAnimation();
+protected:
+	//StatSection
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr < class UABCharacterStatComponent > Stat;
+protected:
+	//UI Widget Section
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UWidgetComponent> HpBar;
+	virtual void SetupCharacterWidget(class UABUserWidget* InUserWidget) override;
+	virtual void PostInitializeComponents() override;
 private:
 	int32 CurrentComboCnt = 0;
 	FTimerHandle ComboTimerHandle;
