@@ -7,6 +7,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Physics/ABCollision.h"
 #include "Interface/ABCharacterInterface.h"
+#include "Engine/AssetManager.h"
+#include "ABItemData.h"
 
 // Sets default values
 AABItemBox::AABItemBox()
@@ -71,3 +73,23 @@ void AABItemBox::OnEffectFinished(UParticleSystemComponent* ParticleSystem)
 {
 
 }
+
+void AABItemBox::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	UAssetManager& Manager = UAssetManager::Get();
+
+	TArray<FPrimaryAssetId> Asset;
+	Manager.GetPrimaryAssetIdList(TEXT("ABItemData"),Asset);
+
+	ensure(0 < Asset.NUM());
+	int32 RandomIndex = FMath::RandRange(0, Asset.Num() - 1);
+	FSoftObjectPtr AssetPtr(Manager.GetPrimaryAssetPath(Asset[RandomIndex]));
+	if (AssetPtr.IsPending())
+	{
+		AssetPtr.LoadSynchronous();
+	}
+	Item = Cast<UABItemData>(AssetPtr.Get());
+	ensure(Item);
+}
+

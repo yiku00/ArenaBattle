@@ -14,6 +14,7 @@ class ARENABATTLE_API AABItemBox : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AABItemBox();
+	FORCEINLINE class UBoxComponent* GetTrigger() { return Triger; }
 protected:
 	UPROPERTY(VisibleInstanceOnly, Category = Box)
 	TObjectPtr<class UBoxComponent> Triger;
@@ -35,6 +36,8 @@ protected:
 
 	UFUNCTION()
 	void OnEffectFinished(class UParticleSystemComponent* ParticleSystem);
+
+	virtual void PostInitializeComponents() override;
 public:	
 
 
