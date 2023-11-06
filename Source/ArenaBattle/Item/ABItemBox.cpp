@@ -24,7 +24,7 @@ AABItemBox::AABItemBox()
 
 	Triger->SetCollisionProfileName(CPROFILE_ABTRIGER);
 	Triger->SetBoxExtent(FVector(40.f,42.f,30.f));
-	Triger->OnComponentBeginOverlap.AddDynamic(this, &AABItemBox::OnOverlapBegin);
+
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BoxMeshRef(TEXT("/Script/Engine.StaticMesh'/Game/ArenaBattle/Environment/Props/SM_Env_Breakables_Box1.SM_Env_Breakables_Box1'"));
 	if (BoxMeshRef.Succeeded())
@@ -82,7 +82,7 @@ void AABItemBox::PostInitializeComponents()
 	TArray<FPrimaryAssetId> Asset;
 	Manager.GetPrimaryAssetIdList(TEXT("ABItemData"),Asset);
 
-	ensure(0 < Asset.NUM());
+	ensure(0 < Asset.Num());
 	int32 RandomIndex = FMath::RandRange(0, Asset.Num() - 1);
 	FSoftObjectPtr AssetPtr(Manager.GetPrimaryAssetPath(Asset[RandomIndex]));
 	if (AssetPtr.IsPending())
@@ -91,5 +91,7 @@ void AABItemBox::PostInitializeComponents()
 	}
 	Item = Cast<UABItemData>(AssetPtr.Get());
 	ensure(Item);
+
+	Triger->OnComponentBeginOverlap.AddDynamic(this, &AABItemBox::OnOverlapBegin);
 }
 

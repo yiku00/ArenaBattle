@@ -96,4 +96,7 @@ private:
 	int32 CurrentComboCnt = 0;
 	FTimerHandle ComboTimerHandle;
 	bool HasNextComboCommand = false;
+public:
+	int32 GetLevel();
+	void SetLevel(int32 NewLevel);
 };
