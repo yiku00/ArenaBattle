@@ -7,6 +7,7 @@
 UABCharacterStatComponent::UABCharacterStatComponent()
 {
 	CurrentLevel = 1;
+	AttackRadius = 50.f;
 }
 
 void UABCharacterStatComponent::SetLevelStat(int32 InNewLevel)
