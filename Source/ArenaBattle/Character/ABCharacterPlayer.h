@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Character/ABCharacterBase.h"
+#include "Interface/ABCharacterHUDInterface.h"
 #include "ABCharacterPlayer.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ARENABATTLE_API AABCharacterPlayer : public AABCharacterBase
+class ARENABATTLE_API AABCharacterPlayer : public AABCharacterBase, public IABCharacterHUDInterface
 {
 	GENERATED_BODY()
 public:
@@ -21,9 +22,9 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void SetCharacterControlData(const class UABCharacterControlData* CharacterControlData) override;
-
 	void ChangeCharaterControl();
 	void SetCharacterControl(ECharacterControlType NewCharacterControlType);
+
 //CameraSection
 protected:
 	/** Camera boom positioning the camera behind the character */
@@ -61,6 +62,9 @@ protected:
 
 	virtual void ProcessComboCommand() override;
 	ECharacterControlType CurrentControlType;
+protected:
+	//UI Serction
+	virtual void SetupHUDWidget(class UABHUDWidget* InWidget) override;
 private:
 
 };

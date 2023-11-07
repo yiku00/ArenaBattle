@@ -9,6 +9,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHpZeroDelegate);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHpChangedDeletage,float /*CurrentHp*/);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChangedDelegate, const FABCharacterStat& /*Base Stat*/, const FABCharacterStat& /*Modifier Stat*/)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ARENABATTLE_API UABCharacterStatComponent : public UActorComponent
@@ -20,17 +21,21 @@ public:
 	UABCharacterStatComponent();
 	FOnHpZeroDelegate OnHpZero;
 	FOnHpChangedDeletage OnHpChanged;
+	FOnStatChangedDelegate OnStatChanged;
 
 	void SetLevelStat(int32 InNewLevel);
 	FORCEINLINE float GetCurrentLevel() const { return CurrentLevel; }
-	FORCEINLINE void SetModifierStat(const FABCharacterStat& InModifierStat) {ModifierStat = InModifierStat;}
+	FORCEINLINE void SetModifierStat(const FABCharacterStat& InModifierStat) { ModifierStat = InModifierStat; OnStatChanged.Broadcast(BaseStat, ModifierStat); }
+	FORCEINLINE void SetBaseStat(const FABCharacterStat& InBaseStat) { BaseStat = InBaseStat; OnStatChanged.Broadcast(BaseStat, ModifierStat); }
 	FORCEINLINE FABCharacterStat GetTotalStat() const { return BaseStat + ModifierStat; }
+	FORCEINLINE FABCharacterStat GetBaseStat() const { return BaseStat; }
+	FORCEINLINE FABCharacterStat GetModifierStat() const { return ModifierStat; }
 	FORCEINLINE float GetCurrentHp() { return CurrentHp; }
 	FORCEINLINE float GetAttackRadius() { return AttackRadius; }
 	float ApplyDamage(float InDamage);
 protected:
 	void SetHp(float NewHp);
-	virtual void BeginPlay() override;
+	virtual void InitializeComponent() override;
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
 	float CurrentHp;

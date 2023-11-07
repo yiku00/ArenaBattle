@@ -8,6 +8,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "ABCharacterControlData.h"
+#include "UI/ABHUDWidget.h"
+#include "CharacterStat//ABCharacterStatComponent.h"
 
 AABCharacterPlayer::AABCharacterPlayer()
 {
@@ -199,11 +201,22 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 
 void AABCharacterPlayer::Attack(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AttackAttackAttackAttackAttackAttack"));
 	ProcessComboCommand();
 }
 
 void AABCharacterPlayer::ProcessComboCommand()
 {
 	Super::ProcessComboCommand();
+}
+
+void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InWidget)
+{
+	if (InWidget)
+	{
+		InWidget->UpdateStat(Stat->GetBaseStat(), Stat->GetModifierStat());
+		InWidget->UpdateHpBar(Stat->GetCurrentHp());
+
+		Stat->OnHpChanged.AddUObject(InWidget, &UABHUDWidget::UpdateHpBar);
+		Stat->OnStatChanged.AddUObject(InWidget, &UABHUDWidget::UpdateStat);
+	}
 }
