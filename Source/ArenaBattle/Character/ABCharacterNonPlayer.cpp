@@ -19,6 +19,13 @@ AABCharacterNonPlayer::AABCharacterNonPlayer()
 void AABCharacterNonPlayer::SetDead()
 {
 	Super::SetDead();
+
+	AABAIController* ABAIController = Cast<AABAIController>(GetController());
+	if (ABAIController)
+	{
+		ABAIController->StopAI();
+	}
+
 	FTimerHandle DeadTimer;
 	GetWorld()->GetTimerManager().SetTimer(DeadTimer, FTimerDelegate::CreateLambda(
 		[&]()

@@ -21,6 +21,8 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void SetDead() override;
+
 	virtual void SetCharacterControlData(const class UABCharacterControlData* CharacterControlData) override;
 	void ChangeCharaterControl();
 	void SetCharacterControl(ECharacterControlType NewCharacterControlType);
